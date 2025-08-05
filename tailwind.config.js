@@ -13,8 +13,25 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Roboto', ...defaultTheme.fontFamily.sans],
             },
+            fontSize: {
+                title: "20px",
+                subtitle: "15px",
+                subtext: "14px",
+                paragraph: "13px"
+            },
+            colors: {
+                main: {
+                    100: "#F1FFF3",
+                    200: "#DFF7E2",
+                    300: "#00D09E",
+                    400: "#0E3E3E",
+                    500: "#093030",
+                    600: "#052224",
+                    700: "#031314",
+                }
+            }
         },
     },
 
