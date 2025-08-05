@@ -4,13 +4,19 @@ import gsap from "gsap";
 import { onMounted, ref, watch } from "vue";
 
 const isLoading = ref(false);
-const form = ref<{ email: string; password: string }>({
+const form = ref<{ email: string; username: string; password: string }>({
     email: "",
+    username: "",
     password: "",
 });
 
-const formErrors = ref<{ email: string | null; password: string | null }>({
+const formErrors = ref<{
+    email: string | null;
+    username: string | null;
+    password: string | null;
+}>({
     email: null,
+    username: null,
     password: null,
 });
 function validateEmail(email: string) {
@@ -23,7 +29,10 @@ function validateEmailField(value: string) {
     if (!validateEmail(value)) return "Format email tidak valid.";
     return null;
 }
-
+function validateUsernameField(value: string) {
+    if (!value) return "Username wajib diisi.";
+    return null;
+}
 function validatePasswordField(value: string) {
     if (!value) return "Password wajib diisi.";
     return null;
@@ -33,6 +42,13 @@ watch(
     () => form.value.email,
     (newVal) => {
         formErrors.value.email = validateEmailField(newVal);
+    },
+);
+
+watch(
+    () => form.value.username,
+    (newVal) => {
+        formErrors.value.username = validateUsernameField(newVal);
     },
 );
 
@@ -65,7 +81,7 @@ const handleSubmit = () => {
         triggerShakeAnimation();
         return;
     }
-    if (!form.value.email || !form.value.password) {
+    if (!form.value.email || !form.value.username || !form.value.password) {
         // useToast().show("Email dan Kata Sandi wajib diisi.", "error");
         triggerShakeAnimation();
         return;
@@ -75,8 +91,9 @@ const handleSubmit = () => {
     setTimeout(() => {
         isLoading.value = false;
         if (
-            form.value.email === "test@joglo.local" &&
-            form.value.password === "test"
+            (form.value.email === "test@joglo.local" &&
+                form.value.username === "test",
+            form.value.password === "test")
         ) {
             // useToast().show("Login berhasil!");
         } else {
@@ -193,6 +210,21 @@ onMounted(() => {
                     </p>
                 </div>
                 <div class="form-group anim-item">
+                    <label for="username">Username</label>
+                    <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        v-model="form.username"
+                    />
+                    <p
+                        v-if="formErrors.username"
+                        class="text-red-600 text-sm mt-1 ml-3"
+                    >
+                        {{ formErrors.username }}
+                    </p>
+                </div>
+                <div class="form-group anim-item">
                     <label for="password">Password</label>
                     <input
                         type="password"
@@ -207,14 +239,7 @@ onMounted(() => {
                         {{ formErrors.password }}
                     </p>
                 </div>
-                <div class="mt-4 flex justify-end anim-item">
-                    <a
-                        href="#"
-                        class="text-subtext font-light underline text-center"
-                        >Forget Your Password?</a
-                    >
-                </div>
-                <div class="flex flex-col items-center -mt-1.5">
+                <div class="flex flex-col items-center mt-4">
                     <button
                         type="submit"
                         class="submit-button anim-item"
@@ -225,9 +250,9 @@ onMounted(() => {
                         <span v-else>Loading...</span>
                     </button>
                     <a
-                        href="/register"
+                        href="/"
                         class="text-subtext font-light underline text-center mt-4 anim-item"
-                        >Don't Have an Account?</a
+                        >Already Have an Account?</a
                     >
                 </div>
             </form>
