@@ -3,14 +3,10 @@ import { Head, useForm } from "@inertiajs/vue3";
 import gsap from "gsap";
 import { onMounted, ref, watch } from "vue";
 
-const props = defineProps<{
-    name?: string;
-}>();
-
 const isLoading = ref(false);
 const form = useForm<{ email: string; password: string }>({
-    email: "sikma363@gmail.com",
-    password: "Testtr123123123",
+    email: "",
+    password: "",
 });
 
 const formErrors = ref<{ email: string | null; password: string | null }>({

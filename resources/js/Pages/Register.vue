@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { Head } from "@inertiajs/vue3";
+import { Head, useForm } from "@inertiajs/vue3";
 import gsap from "gsap";
 import { onMounted, ref, watch } from "vue";
 
 const isLoading = ref(false);
-const form = ref<{ email: string; username: string; password: string }>({
+const form = useForm<{ email: string; name: string; password: string }>({
     email: "",
-    username: "",
+    name: "",
     password: "",
 });
 
 const formErrors = ref<{
     email: string | null;
-    username: string | null;
+    name: string | null;
     password: string | null;
 }>({
     email: null,
-    username: null,
+    name: null,
     password: null,
 });
 function validateEmail(email: string) {
@@ -29,8 +29,8 @@ function validateEmailField(value: string) {
     if (!validateEmail(value)) return "Format email tidak valid.";
     return null;
 }
-function validateUsernameField(value: string) {
-    if (!value) return "Username wajib diisi.";
+function validateNameField(value: string) {
+    if (!value) return "Name wajib diisi.";
     return null;
 }
 function validatePasswordField(value: string) {
@@ -39,21 +39,21 @@ function validatePasswordField(value: string) {
 }
 
 watch(
-    () => form.value.email,
+    () => form.email,
     (newVal) => {
         formErrors.value.email = validateEmailField(newVal);
     },
 );
 
 watch(
-    () => form.value.username,
+    () => form.name,
     (newVal) => {
-        formErrors.value.username = validateUsernameField(newVal);
+        formErrors.value.name = validateNameField(newVal);
     },
 );
 
 watch(
-    () => form.value.password,
+    () => form.password,
     (newVal) => {
         formErrors.value.password = validatePasswordField(newVal);
     },
@@ -77,30 +77,27 @@ const triggerShakeAnimation = () => {
 };
 
 const handleSubmit = () => {
-    if (!validateEmail(form.value.email)) {
+    if (!validateEmail(form.email)) {
         triggerShakeAnimation();
         return;
     }
-    if (!form.value.email || !form.value.username || !form.value.password) {
-        // useToast().show("Email dan Kata Sandi wajib diisi.", "error");
+    if (!form.email || !form.name || !form.password) {
         triggerShakeAnimation();
         return;
     }
 
     isLoading.value = true;
-    setTimeout(() => {
-        isLoading.value = false;
-        if (
-            (form.value.email === "test@joglo.local" &&
-                form.value.username === "test",
-                form.value.password === "test")
-        ) {
-            // useToast().show("Login berhasil!");
-        } else {
-            // useToast().show("Username atau kata sandi salah.", "error");
+
+    form.post(route("register"), {
+        onFinish: () => {
+            isLoading.value = false;
+        },
+        onError: (errors) => {
             triggerShakeAnimation();
-        }
-    }, 1500);
+
+            console.log(errors);
+        },
+    });
 };
 
 onMounted(() => {
@@ -203,10 +200,10 @@ onMounted(() => {
                     </p>
                 </div>
                 <div class="form-group anim-item">
-                    <label for="username">Username</label>
-                    <input type="text" name="username" id="username" v-model="form.username" />
-                    <p v-if="formErrors.username" class="text-red-600 text-sm mt-1 ml-3">
-                        {{ formErrors.username }}
+                    <label for="name">Name</label>
+                    <input type="text" name="name" id="username" v-model="form.name" />
+                    <p v-if="formErrors.name" class="text-red-600 text-sm mt-1 ml-3">
+                        {{ formErrors.name }}
                     </p>
                 </div>
                 <div class="form-group anim-item">
