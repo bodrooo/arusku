@@ -93,7 +93,7 @@ const handleSubmit = () => {
         if (
             (form.value.email === "test@joglo.local" &&
                 form.value.username === "test",
-            form.value.password === "test")
+                form.value.password === "test")
         ) {
             // useToast().show("Login berhasil!");
         } else {
@@ -186,6 +186,7 @@ onMounted(() => {
 </style>
 
 <template>
+
     <Head title="Login" />
     <main class="form-container">
         <section class="form-wrapper shadow-sm">
@@ -196,64 +197,33 @@ onMounted(() => {
                 </div>
                 <div class="form-group anim-item">
                     <label for="email">Email</label>
-                    <input
-                        type="text"
-                        name="email"
-                        id="email"
-                        v-model="form.email"
-                    />
-                    <p
-                        v-if="formErrors.email"
-                        class="text-red-600 text-sm mt-1 ml-3"
-                    >
+                    <input type="text" name="email" id="email" v-model="form.email" />
+                    <p v-if="formErrors.email" class="text-red-600 text-sm mt-1 ml-3">
                         {{ formErrors.email }}
                     </p>
                 </div>
                 <div class="form-group anim-item">
                     <label for="username">Username</label>
-                    <input
-                        type="text"
-                        name="username"
-                        id="username"
-                        v-model="form.username"
-                    />
-                    <p
-                        v-if="formErrors.username"
-                        class="text-red-600 text-sm mt-1 ml-3"
-                    >
+                    <input type="text" name="username" id="username" v-model="form.username" />
+                    <p v-if="formErrors.username" class="text-red-600 text-sm mt-1 ml-3">
                         {{ formErrors.username }}
                     </p>
                 </div>
                 <div class="form-group anim-item">
                     <label for="password">Password</label>
-                    <input
-                        type="password"
-                        name="password"
-                        id="password"
-                        v-model="form.password"
-                    />
-                    <p
-                        v-if="formErrors.password"
-                        class="text-red-600 text-sm mt-1 ml-3"
-                    >
+                    <input type="password" name="password" id="password" v-model="form.password" />
+                    <p v-if="formErrors.password" class="text-red-600 text-sm mt-1 ml-3">
                         {{ formErrors.password }}
                     </p>
                 </div>
                 <div class="flex flex-col items-center mt-4">
-                    <button
-                        type="submit"
-                        class="submit-button anim-item"
-                        :class="{ 'animate-pulse': isLoading }"
-                        :disabled="!form.email || !form.password || isLoading"
-                    >
+                    <button type="submit" class="submit-button anim-item" :class="{ 'animate-pulse': isLoading }"
+                        :disabled="!form.email || !form.password || isLoading">
                         <span v-if="!isLoading">Login</span>
                         <span v-else>Loading...</span>
                     </button>
-                    <a
-                        href="/"
-                        class="text-subtext font-light underline text-center mt-4 anim-item"
-                        >Already Have an Account?</a
-                    >
+                    <a href="/" class="text-subtext font-light underline text-center mt-4 anim-item">Already Have an
+                        Account?</a>
                 </div>
             </form>
         </section>

@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import { Head } from "@inertiajs/vue3";
+import { Head, useForm } from "@inertiajs/vue3";
 import gsap from "gsap";
 import { onMounted, ref, watch } from "vue";
 
+const props = defineProps<{
+    name?: string;
+}>();
+
 const isLoading = ref(false);
-const form = ref<{ email: string; password: string }>({
-    email: "",
-    password: "",
+const form = useForm<{ email: string; password: string }>({
+    email: "sikma363@gmail.com",
+    password: "Testtr123123123",
 });
 
 const formErrors = ref<{ email: string | null; password: string | null }>({
@@ -30,14 +34,14 @@ function validatePasswordField(value: string) {
 }
 
 watch(
-    () => form.value.email,
+    () => form.email,
     (newVal) => {
         formErrors.value.email = validateEmailField(newVal);
     },
 );
 
 watch(
-    () => form.value.password,
+    () => form.password,
     (newVal) => {
         formErrors.value.password = validatePasswordField(newVal);
     },
@@ -61,29 +65,29 @@ const triggerShakeAnimation = () => {
 };
 
 const handleSubmit = () => {
-    if (!validateEmail(form.value.email)) {
+    if (!validateEmail(form.email)) {
+        console.log("invalid email");
         triggerShakeAnimation();
         return;
     }
-    if (!form.value.email || !form.value.password) {
-        // useToast().show("Email dan Kata Sandi wajib diisi.", "error");
+    if (!form.email || !form.password) {
+        console.log("Wrong email or password");
         triggerShakeAnimation();
         return;
     }
 
     isLoading.value = true;
-    setTimeout(() => {
-        isLoading.value = false;
-        if (
-            form.value.email === "test@joglo.local" &&
-            form.value.password === "test"
-        ) {
-            // useToast().show("Login berhasil!");
-        } else {
-            // useToast().show("Username atau kata sandi salah.", "error");
+
+    form.post(route("login"), {
+        onFinish: () => {
+            isLoading.value = false;
+        },
+        onError: (errors) => {
             triggerShakeAnimation();
-        }
-    }, 1500);
+
+            console.log(errors);
+        },
+    });
 };
 
 onMounted(() => {
@@ -169,66 +173,40 @@ onMounted(() => {
 </style>
 
 <template>
+
     <Head title="Login" />
     <main class="form-container">
         <section class="form-wrapper shadow-sm">
-            <form class="form" @submit.prevent="handleSubmit()">
+            <form class="form" @submit.prevent="handleSubmit">
                 <div class="form-header anim-item">
                     <h1>Arusku</h1>
                     <span>Plan and Track your Money.</span>
                 </div>
                 <div class="form-group anim-item">
                     <label for="email">Email</label>
-                    <input
-                        type="text"
-                        name="email"
-                        id="email"
-                        v-model="form.email"
-                    />
-                    <p
-                        v-if="formErrors.email"
-                        class="text-red-600 text-sm mt-1 ml-3"
-                    >
+                    <input type="text" name="email" id="email" v-model="form.email" />
+                    <p v-if="formErrors.email" class="text-red-600 text-sm mt-1 ml-3">
                         {{ formErrors.email }}
                     </p>
                 </div>
                 <div class="form-group anim-item">
                     <label for="password">Password</label>
-                    <input
-                        type="password"
-                        name="password"
-                        id="password"
-                        v-model="form.password"
-                    />
-                    <p
-                        v-if="formErrors.password"
-                        class="text-red-600 text-sm mt-1 ml-3"
-                    >
+                    <input type="password" name="password" id="password" v-model="form.password" />
+                    <p v-if="formErrors.password" class="text-red-600 text-sm mt-1 ml-3">
                         {{ formErrors.password }}
                     </p>
                 </div>
                 <div class="mt-4 flex justify-end anim-item">
-                    <a
-                        href="#"
-                        class="text-subtext font-light underline text-center"
-                        >Forget Your Password?</a
-                    >
+                    <a href="#" class="text-subtext font-light underline text-center">Forget Your Password?</a>
                 </div>
                 <div class="flex flex-col items-center -mt-1.5">
-                    <button
-                        type="submit"
-                        class="submit-button anim-item"
-                        :class="{ 'animate-pulse': isLoading }"
-                        :disabled="!form.email || !form.password || isLoading"
-                    >
+                    <button type="submit" class="submit-button anim-item" :class="{ 'animate-pulse': isLoading }"
+                        :disabled="!form.email || !form.password || isLoading">
                         <span v-if="!isLoading">Login</span>
                         <span v-else>Loading...</span>
                     </button>
-                    <a
-                        href="/register"
-                        class="text-subtext font-light underline text-center mt-4 anim-item"
-                        >Don't Have an Account?</a
-                    >
+                    <a href="/register" class="text-subtext font-light underline text-center mt-4 anim-item">Don't Have
+                        an Account?</a>
                 </div>
             </form>
         </section>
