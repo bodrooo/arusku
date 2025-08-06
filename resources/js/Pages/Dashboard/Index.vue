@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { Head } from "@inertiajs/vue3";
+import { Head, usePage } from "@inertiajs/vue3";
+
+const user = usePage().props.auth.user;
 </script>
 
 <template>
@@ -8,5 +10,6 @@ import { Head } from "@inertiajs/vue3";
 
     <main>
         <h1>Dashboard Page</h1>
+        <pre>{{ user }}</pre>
     </main>
 </template>
