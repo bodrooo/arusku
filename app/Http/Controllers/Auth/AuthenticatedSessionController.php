@@ -20,7 +20,7 @@ class AuthenticatedSessionController extends Controller
         if (Auth::check()) {
             return redirect()->route('dashboard');
         }
-        return Inertia::render('Welcome');
+        return Inertia::render('Auth/Login');
     }
 
     /**

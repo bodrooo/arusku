@@ -24,7 +24,7 @@ class RegisteredUserController extends Controller
             return redirect()->route('dashboard');
         }
 
-        return Inertia::render('Register');
+        return Inertia::render('Auth/Register');
     }
 
     /**
