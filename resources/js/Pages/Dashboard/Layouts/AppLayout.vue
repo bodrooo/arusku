@@ -29,7 +29,7 @@ onMounted(() => {
 
 <style lang="postcss">
 #root-wrapper {
-    --top-section-height: 300px;
+    --top-section-height: 200px;
     display: grid;
     grid-template-rows: var(--top-section-height) 1fr;
 }
