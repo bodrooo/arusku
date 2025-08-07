@@ -1,5 +1,11 @@
+<script setup lang="ts">
+import AppLayout from "../Layouts/AppLayout.vue";
+</script>
+
 <template>
-    <div>
-        <h1>Transaction view</h1>
-    </div>
+    <AppLayout>
+        <template #top-section>
+            <h1>Transaction</h1>
+        </template>
+    </AppLayout>
 </template>
