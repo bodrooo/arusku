@@ -37,7 +37,7 @@ const activeTabComponent = computed(() => tabComponents[activeTab.value]);
 #root {
     --bottom-navigation-height: 160px;
 
-    @apply bg-main-100;
+    @apply bg-main-300;
     height: 100dvh;
     display: grid;
     grid-template-rows: 1fr var(--bottom-navigation-height);

@@ -12,7 +12,7 @@ const props = defineProps({
     },
     modelIndex: {
         type: Number,
-        default: 0,
+        default: 1,
     },
 });
 
@@ -39,7 +39,7 @@ const calculateMetrics = () => {
         return {
             // width: buttonRect.width,
             width: 82,
-            left: buttonRect.left - 41 - navRect.left,
+            left: buttonRect.left - navRect.left - 41,
         };
     });
 };
@@ -52,6 +52,16 @@ const updateSlider = (animated = true) => {
     if (buttonMetrics.value.length === 0 || !sliderRef.value) return;
     const metrics = buttonMetrics.value[props.modelIndex];
     if (!metrics) return;
+
+    iconRefs.value.forEach((icon, index) => {
+        if (icon) {
+            gsap.to(icon, {
+                y: index === props.modelIndex ? "-50%" : "0%",
+                duration: 0.5,
+                ease: "back.out(1.7)",
+            });
+        }
+    });
     if (animated) {
         gsap.to(sliderRef.value, {
             width: metrics.width,
@@ -93,26 +103,9 @@ const selectTab = (tabName, index) => {
 
 watch(
     () => props.modelIndex,
-    (newIndex, oldIndex) => {
+    (_newIndex, oldIndex) => {
         nextTick(() => {
             updateSlider(oldIndex !== undefined);
-
-            if (iconRefs.value[oldIndex]) {
-                gsap.to(iconRefs.value[oldIndex], {
-                    y: 0,
-                    duration: 0.4,
-                    clearProps: "transform",
-                    ease: "power2.out",
-                });
-            }
-
-            if (iconRefs.value[newIndex]) {
-                gsap.to(iconRefs.value[newIndex], {
-                    y: "-50%",
-                    duration: 0.5,
-                    ease: "back.out(1.7)",
-                });
-            }
         });
     },
     { immediate: true },
@@ -130,8 +123,8 @@ onMounted(() => {
         "footer nav button",
         {
             scale: 0,
-            duration: 0.3,
-            ease: "power2.out",
+            duration: 0.5,
+            ease: "back.out(1.7)",
             stagger: 0.1,
         },
         "<0.1",
@@ -187,11 +180,11 @@ onUnmounted(() => {
             @apply size-8;
         }
     }
-}
 
-.active-tab span {
-    svg {
-        @apply size-12 text-main-400;
+    &.active-tab span {
+        svg {
+            @apply size-12 text-main-400;
+        }
     }
 }
 
