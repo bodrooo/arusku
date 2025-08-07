@@ -159,13 +159,13 @@ onUnmounted(() => {
 
 <style lang="postcss">
 .bottom-navigation-container {
-    @apply flex items-end;
+    @apply flex items-end bg-main-100;
     height: var(--bottom-navigation-height);
 }
 
 .bottom-navigation-wrapper {
     @apply grid grid-cols-3 w-full bg-main-200 relative;
-    height: calc(var(--bottom-navigation-height) / 2);
+    height: 80px;
     border-radius: 30px 30px 0 0;
 }
 
@@ -189,8 +189,8 @@ onUnmounted(() => {
 }
 
 .bottom-navigation-slider {
-    @apply bg-main-300 absolute;
-    height: calc(var(--bottom-navigation-height) / 2);
+    @apply bg-main-100 absolute;
+    height: 80px;
     transform: translateY(-50%);
     border-radius: 30px;
     will-change: transform, width;
