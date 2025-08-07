@@ -35,7 +35,6 @@ const calculateMetrics = () => {
 
     buttonMetrics.value = navButtons.value.map((button) => {
         const buttonRect = button.getBoundingClientRect();
-        console.log({ btn: buttonRect.left, nav: navRect.left });
         return {
             // width: buttonRect.width,
             width: 82,
@@ -201,20 +200,32 @@ onUnmounted(() => {
     <footer class="bottom-navigation-container">
         <nav class="bottom-navigation-wrapper">
             <div class="bottom-navigation-slider" ref="sliderRef"></div>
-            <button class="bottom-navigation-menu" :ref="(el) => (navButtons[0] = el)"
-                :class="{ 'active-tab': isActive('Transaction') }" @click="selectTab('Transaction', 0)">
+            <button
+                class="bottom-navigation-menu"
+                :ref="(el) => (navButtons[0] = el)"
+                :class="{ 'active-tab': isActive('Transaction') }"
+                @click="selectTab('Transaction', 0)"
+            >
                 <span :ref="(el) => (iconRefs[0] = el)">
                     <Atom2Icon />
                 </span>
             </button>
-            <button class="bottom-navigation-menu" :ref="(el) => (navButtons[1] = el)"
-                :class="{ 'active-tab': isActive('Home') }" @click="selectTab('Home', 1)">
+            <button
+                class="bottom-navigation-menu"
+                :ref="(el) => (navButtons[1] = el)"
+                :class="{ 'active-tab': isActive('Home') }"
+                @click="selectTab('Home', 1)"
+            >
                 <span :ref="(el) => (iconRefs[1] = el)">
                     <HomeSimpleIcon />
                 </span>
             </button>
-            <button class="bottom-navigation-menu" :ref="(el) => (navButtons[2] = el)"
-                :class="{ 'active-tab': isActive('More') }" @click="selectTab('More', 2)">
+            <button
+                class="bottom-navigation-menu"
+                :ref="(el) => (navButtons[2] = el)"
+                :class="{ 'active-tab': isActive('More') }"
+                @click="selectTab('More', 2)"
+            >
                 <span :ref="(el) => (iconRefs[2] = el)">
                     <MenuIcon />
                 </span>

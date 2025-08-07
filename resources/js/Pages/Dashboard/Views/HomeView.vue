@@ -2,9 +2,17 @@
 import { onMounted, ref, watch } from "vue";
 import AppLayout from "../Layouts/AppLayout.vue";
 import gsap from "gsap";
+import AnimatedTabs from "@/Components/AnimatedTabs.vue";
 
 const currentBalance = ref(0);
 const totalExpenses = ref(0);
+
+const tabs = ref([
+    { id: "plan-normal", title: "Budget Plan" },
+    { id: "plan-graph", title: "Graph" },
+]);
+const activeTabIndex = ref(0);
+const showTabs = ref(true);
 
 const balanceDisplay = ref<HTMLElement | null>(null);
 const expenseDisplay = ref<HTMLElement | null>(null);
@@ -69,6 +77,10 @@ onMounted(() => {
     @apply px-8 mt-8;
 }
 
+.bottom-section {
+    @apply pt-8 px-4;
+}
+
 .top-greetings {
     @apply text-main-200;
 
@@ -83,7 +95,7 @@ onMounted(() => {
 
 .top-balance {
     @apply grid place-items-center text-main-200;
-    height: 150px;
+    height: 100px;
     grid-template-columns: 1fr 1px 1fr;
 
     div {
@@ -107,6 +119,14 @@ onMounted(() => {
     width: 2px;
     height: 100px;
 }
+
+.content-container {
+    @apply bg-main-200 p-2;
+}
+
+.bottom-plan-panel {
+    @apply p-2;
+}
 </style>
 
 <template>
@@ -129,6 +149,25 @@ onMounted(() => {
                     <h1 ref="expenseDisplay">IDR 0</h1>
                 </div>
             </section>
+        </template>
+        <template #bottom-section>
+            <AnimatedTabs
+                v-model="activeTabIndex"
+                :tabs="tabs"
+                :show="showTabs"
+            >
+                <template #content-plan-normal>
+                    <section class="bottom-plan-panel">
+                        This is the Budget Plan content
+                    </section>
+                </template>
+
+                <template #content-plan-graph>
+                    <section class="bottom-plan-panel">
+                        This is the Graph content
+                    </section>
+                </template>
+            </AnimatedTabs>
         </template>
     </AppLayout>
 </template>
