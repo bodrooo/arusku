@@ -3,10 +3,43 @@ import { onMounted, ref, watch } from "vue";
 import AppLayout from "../Layouts/AppLayout.vue";
 import gsap from "gsap";
 import AnimatedTabs from "@/Components/AnimatedTabs.vue";
+import BudgetPlanItemCard from "../Partials/BudgetPlanItemCard.vue";
+import { usePage } from "@inertiajs/vue3";
+import { use } from "echarts/core";
+import { PieChart } from "echarts/charts";
+import {
+    TitleComponent,
+    TooltipComponent,
+    LegendComponent,
+} from "echarts/components";
+import { CanvasRenderer } from "echarts/renderers";
+import type { ComposeOption } from "echarts/core";
+import type { PieSeriesOption } from "echarts/charts";
+import type {
+    TitleComponentOption,
+    TooltipComponentOption,
+    LegendComponentOption,
+} from "echarts/components";
+import VChart from "vue-echarts";
+
+use([
+    TitleComponent,
+    TooltipComponent,
+    LegendComponent,
+    PieChart,
+    CanvasRenderer,
+]);
+
+type EChartsOption = ComposeOption<
+    | TitleComponentOption
+    | TooltipComponentOption
+    | LegendComponentOption
+    | PieSeriesOption
+>;
 
 const currentBalance = ref(0);
 const totalExpenses = ref(0);
-
+const user = usePage().props.auth.user;
 const tabs = ref([
     { id: "plan-normal", title: "Budget Plan" },
     { id: "plan-graph", title: "Graph" },
@@ -70,6 +103,66 @@ onMounted(() => {
         currentBalance.value = 2100000;
     }, 500);
 });
+
+const expenseValues = ref([300000, 50000, 100000, 70000, 120000]);
+const expenseLabels = ref([
+    "Makanan",
+    "Transportasi",
+    "Hiburan",
+    "Belanja",
+    "Tagihan",
+]);
+const chartBackgroundColors = [
+    "rgba(255, 99, 132, 0.7)",
+    "rgba(54, 162, 235, 0.7)",
+    "rgba(255, 206, 86, 0.7)",
+    "rgba(75, 192, 192, 0.7)",
+    "rgba(153, 102, 255, 0.7)",
+];
+
+const chartBorderColors = ["#FFF", "#FFF", "#FFF", "#FFF", "#FFF"];
+
+const chartOptions = ref<EChartsOption>({
+    title: {
+        text: "Pengeluaran",
+        left: "center",
+    },
+    tooltip: {
+        trigger: "item",
+    },
+    legend: {
+        show: false,
+        orient: "vertical",
+        left: "left",
+        textStyle: {
+            color: "#333",
+        },
+    },
+    series: [
+        {
+            name: "Pengeluaran",
+            type: "pie",
+            radius: "50%",
+            data: expenseValues.value.map((val, idx) => ({
+                value: val,
+                name: expenseLabels.value[idx],
+                itemStyle: {
+                    color: chartBackgroundColors[idx],
+                    borderColor: chartBorderColors[idx],
+                    borderWidth: 2,
+                },
+            })),
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: "rgba(0, 0, 0, 0.5)",
+                },
+            },
+        },
+    ],
+});
+defineExpose();
 </script>
 
 <style lang="postcss">
@@ -122,10 +215,11 @@ onMounted(() => {
 
 .content-container {
     @apply bg-main-200 p-2;
+    border-radius: 10px;
 }
 
 .bottom-plan-panel {
-    @apply p-2;
+    @apply p-4;
 }
 </style>
 
@@ -134,7 +228,7 @@ onMounted(() => {
         <template #top-section>
             <section class="top-greetings">
                 <div>
-                    <h1>Hi, Bodrooo</h1>
+                    <h1>Hi, {{ user.name }}</h1>
                     <span>Good Morning</span>
                 </div>
             </section>
@@ -158,16 +252,41 @@ onMounted(() => {
             >
                 <template #content-plan-normal>
                     <section class="bottom-plan-panel">
-                        This is the Budget Plan content
+                        <BudgetPlanItemCard
+                            title="Makan"
+                            :amount="300000"
+                            :percentage="10"
+                        />
+
+                        <BudgetPlanItemCard
+                            title="Transport"
+                            :amount="300000"
+                            :percentage="50"
+                        />
+                        <BudgetPlanItemCard
+                            title="Lifestyle"
+                            :amount="200000"
+                            :percentage="80"
+                        />
                     </section>
                 </template>
 
                 <template #content-plan-graph>
                     <section class="bottom-plan-panel">
-                        This is the Graph content
+                        <div class="">
+                            <v-chart
+                                class="chart"
+                                :option="chartOptions"
+                                autoresize
+                                style="width: 100%; height: 300px"
+                            />
+                        </div>
                     </section>
                 </template>
             </AnimatedTabs>
+            <section>
+                <h1>Recently Transaction</h1>
+            </section>
         </template>
     </AppLayout>
 </template>
