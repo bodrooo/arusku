@@ -21,6 +21,9 @@ import type {
     LegendComponentOption,
 } from "echarts/components";
 import VChart from "vue-echarts";
+import BurgerIcon from "@/Components/Icons/BurgerIcon.vue";
+import ScooterIcon from "@/Components/Icons/ScooterIcon.vue";
+import TransactionCard from "../Partials/TransactionCard.vue";
 
 use([
     TitleComponent,
@@ -95,6 +98,14 @@ onMounted(() => {
         y: 20,
         delay: 0.3,
         duration: 1,
+        ease: "power2.out",
+    });
+
+    gsap.from(".transaction-card", {
+        y: 30,
+        opacity: 0,
+        stagger: 0.15,
+        duration: 0.6,
         ease: "power2.out",
     });
 
@@ -221,6 +232,19 @@ defineExpose();
 .bottom-plan-panel {
     @apply p-4;
 }
+
+.bottom-recently-transaction {
+    @apply mt-4;
+
+    h1 {
+        @apply text-title font-bold ml-4;
+    }
+
+    article {
+        @apply bg-main-200;
+        border-radius: 10px;
+    }
+}
 </style>
 
 <template>
@@ -245,47 +269,31 @@ defineExpose();
             </section>
         </template>
         <template #bottom-section>
-            <AnimatedTabs
-                v-model="activeTabIndex"
-                :tabs="tabs"
-                :show="showTabs"
-            >
+            <AnimatedTabs v-model="activeTabIndex" :tabs="tabs" :show="showTabs">
                 <template #content-plan-normal>
                     <section class="bottom-plan-panel">
-                        <BudgetPlanItemCard
-                            title="Makan"
-                            :amount="300000"
-                            :percentage="10"
-                        />
+                        <BudgetPlanItemCard title="Makan" :amount="300000" :percentage="10" />
 
-                        <BudgetPlanItemCard
-                            title="Transport"
-                            :amount="300000"
-                            :percentage="50"
-                        />
-                        <BudgetPlanItemCard
-                            title="Lifestyle"
-                            :amount="200000"
-                            :percentage="80"
-                        />
+                        <BudgetPlanItemCard title="Transport" :amount="300000" :percentage="50" />
+                        <BudgetPlanItemCard title="Lifestyle" :amount="200000" :percentage="80" />
                     </section>
                 </template>
 
                 <template #content-plan-graph>
                     <section class="bottom-plan-panel">
                         <div class="">
-                            <v-chart
-                                class="chart"
-                                :option="chartOptions"
-                                autoresize
-                                style="width: 100%; height: 300px"
-                            />
+                            <v-chart class="chart" :option="chartOptions" autoresize
+                                style="width: 100%; height: 300px" />
                         </div>
                     </section>
                 </template>
             </AnimatedTabs>
-            <section>
+            <section class="bottom-recently-transaction">
                 <h1>Recently Transaction</h1>
+                <article>
+                    <TransactionCard :icon="BurgerIcon" title="Makan Padang" amount="IDR 15.000" date="6 Agt 2026" />
+                    <TransactionCard :icon="ScooterIcon" title="Bensin" amount="IDR 25.000" date="6 Agt 2026" />
+                </article>
             </section>
         </template>
     </AppLayout>

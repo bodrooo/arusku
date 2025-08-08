@@ -40,7 +40,7 @@ onMounted(() => {
 
 .bottom-section {
     --corner-mixed: 50px;
-    @apply bg-main-100;
+    @apply bg-main-100 pb-12;
     border-radius: var(--corner-mixed) var(--corner-mixed) 0 0;
 }
 </style>

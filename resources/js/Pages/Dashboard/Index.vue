@@ -42,4 +42,12 @@ const activeTabComponent = computed(() => tabComponents[activeTab.value]);
     display: grid;
     grid-template-rows: 1fr var(--bottom-navigation-height);
 }
+
+#root-wrapper {
+    @apply overflow-y-auto;
+}
+
+.bottom-navigation-container {
+    @apply relative bottom-0;
+}
 </style>
