@@ -2,6 +2,9 @@
 import gsap from 'gsap';
 import { nextTick, onMounted, ref, watch } from 'vue';
 
+let lastTabChange = 0;
+const tabChangeCooldown = 500;
+
 const props = defineProps({
   activeScreen: { type: String, default: 'Dashboard' },
 });
@@ -47,6 +50,14 @@ function updateSliderPosition(index) {
 }
 
 function setActiveTab(index) {
+  const now = Date.now();
+
+  if (now - lastTabChange < tabChangeCooldown) {
+    return;
+  }
+
+  lastTabChange = now;
+
   activeIndex.value = index;
   emit('changeScreen', tabs[index].name);
 
