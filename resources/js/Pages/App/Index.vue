@@ -1,8 +1,14 @@
 <script setup>
 import BottomUserNav from '@/Components/App/BottomUserNav.vue';
-import { onMounted, ref } from 'vue';
+import { defineAsyncComponent, onMounted, ref } from 'vue';
 
 const activeScreen = ref('Dashboard');
+
+const screens = {
+  Dashboard: defineAsyncComponent(() => import('./Screen/HomeScreen.vue')),
+  Activity: defineAsyncComponent(() => import('./Screen/ActivityScreen.vue')),
+  Settings: defineAsyncComponent(() => import('./Screen/SettingsScreen.vue')),
+};
 
 function changeScreen(screen) {
   activeScreen.value = screen;
@@ -18,7 +24,7 @@ onMounted(() => {
 <template>
   <article id="app-layout" class="flex h-dvh flex-col">
     <main class="app-content">
-      {{ activeScreen }}
+      <component :is="screens[activeScreen]" />
     </main>
     <BottomUserNav :activeScreen="activeScreen" @changeScreen="changeScreen" />
   </article>

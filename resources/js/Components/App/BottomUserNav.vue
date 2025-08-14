@@ -19,7 +19,7 @@ const tabs = [
   },
   {
     icon: 'clock-counter-clockwise',
-    name: 'History',
+    name: 'Activity',
     activeStyle: 'bold',
     inactiveStyle: 'regular',
   },
